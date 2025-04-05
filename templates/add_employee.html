@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Employee {% endblock title %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4 border-0 bg-light">
+        <h2 class="mb-4 text-center text-primary fw-bold">Add Employee</h2>
+        <form action="{{ url_for('add_employee') }}" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <!-- Full Name -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="name" required placeholder="Enter full name">
+                </div>
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" required placeholder="Enter email">
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Phone -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="phone" required placeholder="Enter phone number">
+                </div>
+                <!-- Department -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Department</label>
+                    <select class="form-select" name="Department" required>
+                        <option value="" disabled selected>Select Department</option>
+                        <option value="1">Research & Development</option>
+                        <option value="2">Customer Support</option>
+                        <option value="3">Sales & Marketing</option>
+                        <option value="4">Human Resources</option>
+                        {% for dept in departments %}
+                            <option value="{{ dept.id }}">{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>                
+            <div class="row">
+                <!-- Job Role -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Job Role</label>
+                    <select class="form-select" name="JobRole" required>
+                        <option value="" disabled selected>Select Job Role</option>
+                        <option value="1">Software Developer</option>
+                        <option value="2">Data Analyst</option>
+                        <option value="3">HR Executive</option>
+                        <option value="4">Marketing Manager</option>
+                        {% for role in job_roles %}
+                            <option value="{{ role.id }}">{{ role.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Salary -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Salary</label>
+                    <input type="number" class="form-control" name="Salary" min="10000" step="1000" required placeholder="Enter salary">
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Joining Date -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Joining Date</label>
+                    <input type="date" class="form-control" name="Joiningdate" required>
+                </div>
+                <!-- Status -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="is_active">
+                        <option value="1" selected>Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Profile Picture -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Profile Picture</label>
+                    <input type="file" class="form-control" name="photo">
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                    Add Employee
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock body %}

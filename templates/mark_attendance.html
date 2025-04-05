@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Mark Attendance{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h2 class="mb-4">📅 Mark Attendance</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST">
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <label for="date" class="form-label fw-bold">Date:</label>
+        <input type="date" class="form-control" id="date" name="date" required value="{{ current_date }}">
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Employee Name</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for emp in employees %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td class="text-start">{{ emp.name }}</td>
+            <td>
+              <select name="status_{{ emp.id }}" class="form-select status-select">
+                <option value="Present" selected>✅ Present</option>
+                <option value="Absent">❌ Absent</option>
+                <option value="Leave">🌴 Leave</option>
+              </select>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+      <button type="submit" class="btn btn-success px-4 py-2 fw-bold">✅ Submit Attendance</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Optional: Highlight selected status
+  const selects = document.querySelectorAll('.status-select');
+  selects.forEach(select => {
+    select.addEventListener('change', (e) => {
+      const row = select.closest('tr');
+      row.classList.remove('table-success', 'table-danger', 'table-warning');
+      if (select.value === 'Present') row.classList.add('table-success');
+      else if (select.value === 'Absent') row.classList.add('table-danger');
+      else if (select.value === 'Leave') row.classList.add('table-warning');
+    });
+  });
+</script>
+{% endblock %}

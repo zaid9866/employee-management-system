@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %} Update Employee {% endblock title %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4 border-0 bg-light">
+        <h2 class="mb-4 text-center text-primary fw-bold">Update Employee</h2>
+        <form action="{{ url_for('update_employee_details', employee_id=employee.id) }}" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <!-- Full Name -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="name" value="{{ employee.name }}" required>
+                </div>
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" value="{{ employee.email }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Phone -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="phone" value="{{ employee.phone }}" required>
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Department</label>
+                    <select class="form-select" name="department_id" required>
+                        <option value="{{ employee.department.id }}" selected>{{ employee.department.name }}</option>
+                        {% for dept in departments %}
+                            <option value="{{ dept.id }}">{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Job Role -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Job Role</label>
+                    <select class="form-select" name="job_role_id" required>
+                        <option value="{{ employee.job_role.id }}" selected>{{ employee.job_role.name }}</option>
+                        {% for role in job_roles %}
+                            <option value="{{ role.id }}">{{ role.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Salary -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Salary</label>
+                    <input type="number" class="form-control" name="salary" value="{{ employee.salary }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Joining Date -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Joining Date</label>
+                    <input type="date" class="form-control" name="date_joined" value="{{ employee.date_joined }}" required>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="is_active">
+                        <option value="1" {% if employee.is_active %}selected{% endif %}>Active</option>
+                        <option value="0" {% if not employee.is_active %}selected{% endif %}>Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Profile Picture -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Profile Picture</label>
+                    <input type="file" class="form-control" name="photo">
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,141 @@
+    {% extends 'base.html' %}
+
+    {% block title %}{{ employee.name }} - Employee Details{% endblock %}
+
+    {% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-lg p-4 bg-white rounded" style="border: none;">
+                    <div class="row g-4">
+                        
+                        <!-- Left Side: Profile Photo & Actions -->
+                        <div class="col-md-4 text-center">
+                            <img src="{{ url_for('static', filename=employee.photo) }}" 
+                                class="img-fluid rounded-circle shadow-sm" 
+                                width="180" height="180" alt="Employee Photo">
+                            <h3 class="fw-bold mt-3">{{ employee.name }}</h3>
+                            <h6 class="text-muted">
+                                <i class="bi bi-person-badge-fill"></i> {{ employee.job_role }}
+                            </h6>
+                            <h6 class="text-muted">
+                                <i class="bi bi-building"></i> {{ employee.department.name }}
+                            </h6>
+
+                            <div class="mt-3">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pencil-square"></i> Edit Profile
+                                </a>
+                                <a href="#" class="btn btn-outline-success btn-sm">
+                                    <i class="bi bi-chat-dots"></i> Message
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Details -->
+                        <div class="col-md-8">
+                            <h4 class="fw-bold mb-3">Employee Details</h4>
+                            <hr>
+
+                            <p><i class="bi bi-envelope"></i> <strong>Email:</strong> {{ employee.email }}</p>
+                            <p><i class="bi bi-phone"></i> <strong>Phone:</strong> {{ employee.phone }}</p>
+                            <p><i class="bi bi-geo-alt"></i> <strong>Address:</strong> {{ employee.address or 'N/A' }}</p>
+                            <p><i class="bi bi-calendar-check"></i> <strong>Joined:</strong> {{ employee.date_joined.strftime('%d %B %Y') }}</p>
+                            <p><i class="bi bi-cash-stack"></i> <strong>Salary:</strong> ₹{{ "{:,.2f}".format(employee.salary) }}</p>
+
+                            <p>
+                                <i class="bi bi-person-check"></i> 
+                                <strong>Status:</strong> 
+                                {% if employee.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </p>
+
+                            <!-- Job Info Section -->
+    <div class="mt-4">
+        <h5 class="fw-semibold mb-3">Job Overview</h5>
+        
+        <div class="row">
+            <!-- Position Card -->
+            <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 shadow-sm bg-light h-100">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-briefcase-fill fs-4 text-primary me-2"></i>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Position</h6>
+                            <small class="text-muted">Job Role assigned</small>
+                        </div>
+                    </div>
+                    <p class="mb-0 text-dark ms-4 fs-6">{{ employee.job_role.name}}</p>
+                </div>
+            </div>
+
+            <!-- Department Card -->
+            <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 shadow-sm bg-light h-100">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-diagram-3-fill fs-4 text-success me-2"></i>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Department</h6>
+                            <small class="text-muted">Associated team/branch</small>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-0 text-dark ms-4 fs-6">{{ employee.department.name}}</p>
+                
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience -->
+        <div class="mt-3">
+            <h6><i class="bi bi-graph-up-arrow me-1"></i> <strong>Experience:</strong> {{ employee.job_role or 'N/A' }} Years</h6>
+
+            {% if employee.job_role %}
+            <div class="progress mb-2" style="height: 20px;">
+                <div class="progress-bar bg-info fw-semibold" role="progressbar" 
+                    aria-valuenow="{{employee.job_role.name}}" 
+                    aria-valuemin="0" 
+                    aria-valuemax="10">
+                    {{ employee.experience }} Years
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+                            <!-- Social Media Links -->
+                            <div class="mt-4">
+                                <h5 class="fw-semibold">Social Profiles</h5>
+                                {% if employee.linkedin %}
+                                    <a href="{{ employee.linkedin }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
+                                        <i class="bi bi-linkedin"></i> LinkedIn
+                                    </a>
+                                {% endif %}
+                                {% if employee.twitter %}
+                                    <a href="{{ employee.twitter }}" target="_blank" class="btn btn-outline-info btn-sm me-1">
+                                        <i class="bi bi-twitter"></i> Twitter
+                                    </a>
+                                {% endif %}
+                                {% if employee.github %}
+                                    <a href="{{ employee.github }}" target="_blank" class="btn btn-outline-dark btn-sm">
+                                        <i class="bi bi-github"></i> GitHub
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('home') }}" class="btn btn-dark">
+                            <i class="bi bi-arrow-left"></i> Back to Employee List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

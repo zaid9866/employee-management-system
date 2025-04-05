@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Employees{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h2 class="mb-4">Manage Employees</h2>
+
+  <form method="get" class="row g-3">
+    <!-- Department Filter -->
+    <div class="col-md-4">
+      <label for="department" class="form-label">Department</label>
+      <select name="department" id="department" class="form-select">
+        <option value="" disabled {% if not selected_department %}selected{% endif %}>Select Department</option>
+        <option value="1" {% if selected_department == 1 %}selected{% endif %}>Research & Development</option>
+        <option value="2" {% if selected_department == 2 %}selected{% endif %}>Customer Support</option>
+        <option value="3" {% if selected_department == 3 %}selected{% endif %}>Sales & Marketing</option>
+        <option value="4" {% if selected_department == 4 %}selected{% endif %}>Human Resources</option>
+      </select>
+    </div>
+
+    <!-- Job Role Filter -->
+    <div class="col-md-4">
+      <label for="job_role" class="form-label">Job Role</label>
+      <select name="job_role" id="job_role" class="form-select">
+        <option value="" disabled {% if not selected_job_role %}selected{% endif %}>Select Job Role</option>
+        <option value="1" {% if selected_job_role == 1 %}selected{% endif %}>Software Developer</option>
+        <option value="2" {% if selected_job_role == 2 %}selected{% endif %}>Data Analyst</option>
+        <option value="3" {% if selected_job_role == 3 %}selected{% endif %}>HR Executive</option>
+        <option value="4" {% if selected_job_role == 4 %}selected{% endif %}>Marketing Manager</option>
+      </select>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+  </form>
+
+  <hr>
+
+  <!-- Employee Cards -->
+  <div class="row">
+    {% for emp in employees %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ emp.name }}</h5>
+            <p class="card-text">
+              <strong>Department:</strong> {{ emp.department.name }}<br>
+              <strong>Role:</strong> {{ emp.job_role.name }}<br>
+              <strong>Email:</strong> {{ emp.email }}
+            </p>
+            <a href="{{ url_for('employee_details', employee_id=emp.id) }}" class="btn btn-outline-primary btn-sm">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <p>No employees found.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
