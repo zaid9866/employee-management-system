@@ -2,6 +2,7 @@
 
     {% block title %}{{ employee.name }} - Employee Details{% endblock %}
 
+
     {% block body %}
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -11,12 +12,12 @@
                         
                         <!-- Left Side: Profile Photo & Actions -->
                         <div class="col-md-4 text-center">
-                            <img src="{{ url_for('static', filename=employee.photo) }}" 
+                            <img src="/static/images/v_avatar.png" 
                                 class="img-fluid rounded-circle shadow-sm" 
                                 width="180" height="180" alt="Employee Photo">
                             <h3 class="fw-bold mt-3">{{ employee.name }}</h3>
                             <h6 class="text-muted">
-                                <i class="bi bi-person-badge-fill"></i> {{ employee.job_role }}
+                                <i class="bi bi-person-badge-fill"></i> {{ employee.job_role.name }}
                             </h6>
                             <h6 class="text-muted">
                                 <i class="bi bi-building"></i> {{ employee.department.name }}
@@ -91,7 +92,7 @@
 
         <!-- Experience -->
         <div class="mt-3">
-            <h6><i class="bi bi-graph-up-arrow me-1"></i> <strong>Experience:</strong> {{ employee.job_role or 'N/A' }} Years</h6>
+            <h6><i class="bi bi-graph-up-arrow me-1"></i> <strong>Experience:</strong> {{ employee.job_roles or 'N/A' }} Years</h6>
 
             {% if employee.job_role %}
             <div class="progress mb-2" style="height: 20px;">
@@ -131,7 +132,7 @@
 
                     <div class="text-center mt-4">
                         <a href="{{ url_for('home') }}" class="btn btn-dark">
-                            <i class="bi bi-arrow-left"></i> Back to Employee List
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
                         </a>
                     </div>
                 </div>

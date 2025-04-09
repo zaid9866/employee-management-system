@@ -31,10 +31,10 @@
                     <label class="form-label">Department</label>
                     <select class="form-select" name="Department" required>
                         <option value="" disabled selected>Select Department</option>
-                        <option value="1">Research & Development</option>
-                        <option value="2">Customer Support</option>
+                        <!-- <option value="1">Research & Development</option>
+                        <option value="2">Customer & Support</option>
                         <option value="3">Sales & Marketing</option>
-                        <option value="4">Human Resources</option>
+                        <option value="4">Human Resources</option> -->
                         {% for dept in departments %}
                             <option value="{{ dept.id }}">{{ dept.name }}</option>
                         {% endfor %}
@@ -46,10 +46,10 @@
                     <label class="form-label">Job Role</label>
                     <select class="form-select" name="JobRole" required>
                         <option value="" disabled selected>Select Job Role</option>
-                        <option value="1">Software Developer</option>
+                        <!-- <option value="1">Software Developer</option>
                         <option value="2">Data Analyst</option>
                         <option value="3">HR Executive</option>
-                        <option value="4">Marketing Manager</option>
+                        <option value="4">Marketing Manager</option> -->
                         {% for role in job_roles %}
                             <option value="{{ role.id }}">{{ role.name }}</option>
                         {% endfor %}

@@ -43,8 +43,8 @@
 <div class="container mt-4">
   <!-- Header & Dark Mode Toggle -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-primary">Employee Dashboard</h2>
-    <button class="btn btn-dark-mode fw-bold" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <h2 class="fw-bold text-primary">Dashboard</h2>
+    <button class="btn btn-dark-mode fw-bold" onclick="toggleDarkMode()">Dark Mode</button>
   </div>
 
   <!-- Analytics Cards -->
@@ -98,12 +98,12 @@
           <tr>
             <td>{{ employee.id }}</td>
             <td>
-              <img src="{{ employee.photo if employee.photo else 'https://via.placeholder.com/50' }}" 
+              <img src="/static/images/{{employee.photo}}" 
                    alt="Profile" width="50" height="50" class="rounded-circle border">
             </td>
             <td class="fw-semibold">{{ employee.name }}</td>
             <td>{{ employee.email }}</td>
-            <td>{{ employee.department.name }}</td>
+            <td>{{ employee.department.name}}</std>
             <td>{{ employee.job_role.name if employee.job_role else 'N/A' }}</td>
             <td>
               {% if employee.is_active %}
@@ -114,7 +114,7 @@
             </td>
             <td>
               <a href="/update_employee_details/{{employee.id}}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-              <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+              <a href="/delete_employee/{{employee.id}}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
               <a href="/employee_details/{{employee.id}}" class="btn btn-warning btn-sm">More Details</button>
             </td>
           </tr>
@@ -124,6 +124,23 @@
     </div>
   </div>
 </div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+      {% for category, message in messages %}
+        <div class="toast align-items-center text-white bg-{{ 'success' if category=='success' else 'danger' }} border-0 show" role="alert">
+          <div class="d-flex">
+            <div class="toast-body">
+              {{ message }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 
 <script>
   // Dark Mode Toggle Function

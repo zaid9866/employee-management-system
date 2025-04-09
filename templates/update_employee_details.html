@@ -32,6 +32,10 @@
                     <label class="form-label">Department</label>
                     <select class="form-select" name="department_id" required>
                         <option value="{{ employee.department.id }}" selected>{{ employee.department.name }}</option>
+                         <option value="1">Research & Development</option>
+                        <option value="2">Customer Support</option>
+                        <option value="3">Sales & Marketing</option>
+                        <option value="4">Human Resources</option>
                         {% for dept in departments %}
                             <option value="{{ dept.id }}">{{ dept.name }}</option>
                         {% endfor %}
@@ -40,16 +44,29 @@
             </div>
 
             <div class="row">
+                
                 <!-- Job Role -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Job Role</label>
-                    <select class="form-select" name="job_role_id" required>
-                        <option value="{{ employee.job_role.id }}" selected>{{ employee.job_role.name }}</option>
-                        {% for role in job_roles %}
-                            <option value="{{ role.id }}">{{ role.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Job Role</label>
+    <select class="form-select" name="job_role_id" required>
+        <option value="{{ employee.job_role.id }}" selected>{{ employee.job_role.name }}</option>
+        
+        <!-- Predefined options -->
+        <option value="1">Software Developer</option>
+        <option value="2">Data Analyst</option>
+        <option value="3">HR Executive</option>
+        <option value="4">Marketing Manager</option>
+        
+        <!-- Dynamic options from DB -->
+        {% for role in job_roles %}
+            {% if role.id != employee.job_role.id %}
+                <option value="{{ role.id }}">{{ role.name }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>
+
+             
 
                 <!-- Salary -->
                 <div class="col-md-6 mb-3">
@@ -81,6 +98,7 @@
                     <label class="form-label">Profile Picture</label>
                     <input type="file" class="form-control" name="photo">
                 </div>
+                
             </div>
 
             <!-- Submit -->

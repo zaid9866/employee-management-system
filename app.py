@@ -1,6 +1,6 @@
 import os
 from pydoc import text
-from flask import Flask, flash, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for  
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
@@ -14,7 +14,8 @@ app.secret_key = 'zayd_secret_key_123'
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///employees.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["UPLOAD_FOLDER"] = "upload"
+UPLOAD_FOLDER = 'static/images'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 db = SQLAlchemy(app)
 
@@ -30,7 +31,7 @@ class Employee(db.Model):
     salary = db.Column(db.Float, nullable=False)
     date_joined = db.Column(db.Date, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
-    photo = db.Column(db.String(255), nullable=True)
+    photo = db.Column(db.String(255), nullable=True) 
 
 # Department Table
 class Department(db.Model):
@@ -49,9 +50,9 @@ class Attendance(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
-    status = db.Column(db.String(10), nullable=False)  # Present / Absent / Leave
-
+    status = db.Column(db.String(10), nullable=False)   
     employee = db.relationship('Employee', backref='attendance_records')
+
 
 
 # Create Tables
@@ -65,6 +66,10 @@ def home():
     employees = Employee.query.all()  
     departments=Department.query.all()
     return render_template("index.html", employees=employees ,departments=departments)
+
+ 
+ 
+
 
 #add employee route
 @app.route("/add_employee", methods=["GET", "POST"])
@@ -126,6 +131,8 @@ def add_employee():
 
         db.session.add(employee)
         db.session.commit()
+        flash(f"{employee.name} has been added successfully.", "success")
+
         return redirect(url_for("home"))
 
     departments = Department.query.all()
@@ -144,11 +151,11 @@ def update_employee_details(employee_id):
         employee = Employee.query.get(employee_id)
         return render_template('update_employee_details.html', employee=employee)
 
+
 @app.route('/update_employee_details/<int:employee_id>', methods=["POST"])
 def update_employee_post(employee_id):
     employee = Employee.query.get_or_404(employee_id)
 
-    # Check if phone is being duplicated by someone else
     phone = request.form['phone']
     existing = Employee.query.filter_by(phone=phone).first()
     if existing and existing.id != employee.id:
@@ -162,15 +169,16 @@ def update_employee_post(employee_id):
     employee.department_id = request.form['department_id']
     employee.job_role_id = request.form['job_role_id']
     employee.salary = request.form['salary']
-    employee.date_joined = datetime.strptime(request.form['date_joined'], "%Y-%m-%d").date()
     employee.is_active = bool(int(request.form['is_active']))
 
-    # Optional: handle photo update
+    upload_folder = 'static/images'
+    os.makedirs(upload_folder, exist_ok=True)
+
     photo_file = request.files.get('photo')
     if photo_file and photo_file.filename:
-        # You can save this or use Cloudinary if set up
-        filename = secure_filename(photo_file.filename)  
-        photo_file.save(os.path.join('static/uploads', filename))
+        filename = photo_file.filename
+        file_path = os.path.join(upload_folder, filename)
+        photo_file.save(file_path)
         employee.photo = filename
 
     try:
@@ -241,6 +249,21 @@ def attendance_history():
     attendance_records = Attendance.query.order_by(Attendance.date.desc()).all()
     employees = {emp.id: emp.name for emp in Employee.query.all()}
     return render_template("attendance_history.html", attendance_records=attendance_records, employees=employees)
+
+
+
+#delete employee 
+@app.route("/delete_employee/<int:employee_id>", methods=["GET", "POST"])
+def delete_employee(employee_id):
+    employee = Employee.query.get(employee_id)
+    if employee:
+        db.session.delete(employee)
+        db.session.commit()
+        flash(f"{employee.name} has been deleted successfully.", "success")
+    else:
+        flash("Employee not found.", "danger")
+
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":
